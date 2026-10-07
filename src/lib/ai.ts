@@ -11,7 +11,7 @@ export async function generateEmail(i: EmailInput): Promise<string> {
     Persuasive: `Hi ${name},\n\nI have an idea I think you'll find valuable.`,
     Formal: `Dear ${i.recipient.trim() || "Sir/Madam"},\n\nI am writing to you regarding the following matter.`,
   };
-  return `${openers[i.tone] ?? openers.Professional}\n\nI'm reaching out about ${i.purpose.trim().toLowerCase()}.${
+  return `${openers[i.tone] ?? openers["Professional"]}\n\nI'm reaching out about ${i.purpose.trim().toLowerCase()}.${
     i.context.trim() ? ` ${i.context.trim()}` : ""
   } I'd be happy to answer any questions or set up a quick call to discuss next steps.\n\nLooking forward to hearing from you.\n\nBest regards,\nAlex`;
 }

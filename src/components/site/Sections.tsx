@@ -8,7 +8,7 @@ import { Logo } from "./Navbar";
 import { Chip } from "./Hero";
 
 export function HowItWorks() {
-  const steps = [
+  const steps: [string, string, string][] = [
     ["01", "Tell AI what you need", "Enter an email request, meeting transcript, or goal."],
     ["02", "AI does the heavy lifting", "Our AI analyzes your input and creates useful, structured output."],
     ["03", "Review, edit, and act", "Customize the result and get straight to work."],
@@ -59,7 +59,7 @@ export function DashboardPreview() {
   const nav = [[Home, "Overview"], [Mail, "Email Generator"], [NotebookPen, "Meeting Notes"], [CheckCircle2, "Task Planner"], [History, "History"], [Settings, "Settings"]] as const;
   const stats = [["Emails generated", "24", Mail], ["Meetings summarized", "8", NotebookPen], ["Tasks completed", "37", CheckCircle2], ["Productivity score", "92%", BarChart3]] as const;
   const [done, setDone] = useState<Record<string, boolean>>({ "Reply to client feedback": true });
-  const focus = [["Finalize Q3 launch brief", "High"], ["Reply to client feedback", "High"], ["Review meeting action items", "Medium"], ["Plan next week's sprint", "Low"]];
+  const focus: [string, string][] = [["Finalize Q3 launch brief", "High"], ["Reply to client feedback", "High"], ["Review meeting action items", "Medium"], ["Plan next week's sprint", "Low"]];
   return (
     <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
       <SectionHeading eyebrow="Dashboard" title="Your whole workday, in one place." />
@@ -100,7 +100,7 @@ export function DashboardPreview() {
 }
 
 export function Testimonials() {
-  const t = [
+  const t: [string, string, string][] = [
     ["Sarah M.", "Marketing Manager", "SmartWork AI saves me hours every week. I especially love the meeting summaries and action items."],
     ["David K.", "Startup Founder", "The task planner turns my messy ideas into an organized plan almost instantly."],
     ["Jessica R.", "Sales Director", "The email generator has completely changed how quickly I can respond to clients."],
@@ -158,7 +158,7 @@ export function Pricing() {
 }
 
 export function FAQ() {
-  const q = [
+  const q: [string, string][] = [
     ["What is SmartWork AI?", "SmartWork AI is an AI productivity suite with three tools — an email generator, a meeting notes summarizer, and a task planner — designed to remove busywork from your day."],
     ["How does the AI email generator work?", "Tell it who you're writing to, why, and the tone you want. The AI drafts a polished email you can copy, edit, or regenerate."],
     ["Can I summarize recorded meetings?", "Yes. Upload or paste a transcript and get an executive summary, key points, decisions, and action items in seconds."],
