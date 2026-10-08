@@ -1,0 +1,2 @@
+- [x] Build SmartWork AI site
+- [x] Remove sign-in/authentication
