@@ -22,7 +22,7 @@ function Thinking() {
 function Empty({ text }: { text: string }) {
   return <div className="flex min-h-60 flex-col items-center justify-center gap-2 text-center text-sm text-muted-foreground"><Sparkles className="size-6 text-primary" />{text}</div>;
 }
-function Err({ msg }: { msg?: string }) { return msg ? <p className="text-xs text-destructive">{msg}</p> : null; }
+function Err({ msg }: { msg?: string | undefined }) { return msg ? <p className="text-xs text-destructive">{msg}</p> : null; }
 const copy = async (t: string) => { await navigator.clipboard.writeText(t); toast.success("Copied to clipboard"); };
 const Panel = ({ children }: { children: React.ReactNode }) => <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">{children}</div>;
 const GenBtn = ({ loading, children }: { loading: boolean; children: React.ReactNode }) => (
@@ -31,14 +31,14 @@ const GenBtn = ({ loading, children }: { loading: boolean; children: React.React
 
 export function EmailGenerator() {
   const [f, setF] = useState({ recipient: "", purpose: "", tone: "Professional", context: "" });
-  const [errs, setErrs] = useState<Record<string, string>>({});
+  const [errs, setErrs] = useState<{ [k: string]: string | undefined }>({});
   const [out, setOut] = useState("");
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
   const run = async () => {
-    const e: Record<string, string> = {};
-    if (!f.recipient.trim()) e.recipient = "Recipient is required";
-    if (f.purpose.trim().length < 3) e.purpose = "Describe the purpose";
+    const e: { [k: string]: string } = {};
+    if (!f.recipient.trim()) e["recipient"] = "Recipient is required";
+    if (f.purpose.trim().length < 3) e["purpose"] = "Describe the purpose";
     setErrs(e); if (Object.keys(e).length) return;
     setLoading(true); setEditing(false);
     try { setOut(await generateEmail(f)); toast.success("Email generated"); } finally { setLoading(false); }
@@ -46,8 +46,8 @@ export function EmailGenerator() {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); run(); }} noValidate>
-        <div className="space-y-1.5"><Label htmlFor="rec">Recipient</Label><Input id="rec" placeholder="Sarah Miller" value={f.recipient} onChange={(e) => setF({ ...f, recipient: e.target.value })} aria-invalid={!!errs.recipient} /><Err msg={errs.recipient} /></div>
-        <div className="space-y-1.5"><Label htmlFor="pur">Purpose</Label><Input id="pur" placeholder="Following up on the proposal" value={f.purpose} onChange={(e) => setF({ ...f, purpose: e.target.value })} aria-invalid={!!errs.purpose} /><Err msg={errs.purpose} /></div>
+        <div className="space-y-1.5"><Label htmlFor="rec">Recipient</Label><Input id="rec" placeholder="Sarah Miller" value={f.recipient} onChange={(e) => setF({ ...f, recipient: e.target.value })} aria-invalid={!!errs["recipient"]} /><Err msg={errs["recipient"]} /></div>
+        <div className="space-y-1.5"><Label htmlFor="pur">Purpose</Label><Input id="pur" placeholder="Following up on the proposal" value={f.purpose} onChange={(e) => setF({ ...f, purpose: e.target.value })} aria-invalid={!!errs["purpose"]} /><Err msg={errs["purpose"]} /></div>
         <div className="space-y-1.5"><Label>Tone</Label>
           <Select value={f.tone} onValueChange={(v) => setF({ ...f, tone: v })}><SelectTrigger aria-label="Tone"><SelectValue /></SelectTrigger>
             <SelectContent>{["Professional", "Friendly", "Persuasive", "Formal"].map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select>
@@ -117,13 +117,13 @@ const prioColor: Record<string, string> = { High: "text-destructive", Medium: "t
 
 export function TaskPlanner() {
   const [f, setF] = useState({ goal: "", deadline: "", priority: "High", hours: "10" });
-  const [errs, setErrs] = useState<Record<string, string>>({});
+  const [errs, setErrs] = useState<{ [k: string]: string | undefined }>({});
   const [out, setOut] = useState<PlanTask[] | null>(null);
   const [loading, setLoading] = useState(false);
   const run = async () => {
-    const e: Record<string, string> = {};
-    if (f.goal.trim().length < 3) e.goal = "Tell us your goal";
-    const h = Number(f.hours); if (!h || h <= 0 || h > 200) e.hours = "Enter 1–200 hours";
+    const e: { [k: string]: string } = {};
+    if (f.goal.trim().length < 3) e["goal"] = "Tell us your goal";
+    const h = Number(f.hours); if (!h || h <= 0 || h > 200) e["hours"] = "Enter 1–200 hours";
     setErrs(e); if (Object.keys(e).length) return;
     setLoading(true);
     try { setOut(await planTasks(f.goal, f.deadline, f.priority, h)); toast.success("Task plan created"); } finally { setLoading(false); }
@@ -131,13 +131,13 @@ export function TaskPlanner() {
   return (
     <div className="grid gap-6 lg:grid-cols-[2fr_3fr]">
       <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); run(); }} noValidate>
-        <div className="space-y-1.5"><Label htmlFor="goal">Goal</Label><Input id="goal" placeholder="Launch the new marketing website" value={f.goal} onChange={(e) => setF({ ...f, goal: e.target.value })} aria-invalid={!!errs.goal} /><Err msg={errs.goal} /></div>
+        <div className="space-y-1.5"><Label htmlFor="goal">Goal</Label><Input id="goal" placeholder="Launch the new marketing website" value={f.goal} onChange={(e) => setF({ ...f, goal: e.target.value })} aria-invalid={!!errs["goal"]} /><Err msg={errs["goal"]} /></div>
         <div className="space-y-1.5"><Label htmlFor="dl">Deadline</Label><Input id="dl" type="date" value={f.deadline} onChange={(e) => setF({ ...f, deadline: e.target.value })} /></div>
         <div className="space-y-1.5"><Label>Priority</Label>
           <Select value={f.priority} onValueChange={(v) => setF({ ...f, priority: v })}><SelectTrigger aria-label="Priority"><SelectValue /></SelectTrigger>
             <SelectContent>{["High", "Medium", "Low"].map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent></Select>
         </div>
-        <div className="space-y-1.5"><Label htmlFor="hrs">Available hours</Label><Input id="hrs" type="number" min={1} value={f.hours} onChange={(e) => setF({ ...f, hours: e.target.value })} aria-invalid={!!errs.hours} /><Err msg={errs.hours} /></div>
+        <div className="space-y-1.5"><Label htmlFor="hrs">Available hours</Label><Input id="hrs" type="number" min={1} value={f.hours} onChange={(e) => setF({ ...f, hours: e.target.value })} aria-invalid={!!errs["hours"]} /><Err msg={errs["hours"]} /></div>
         <GenBtn loading={loading}>Generate Plan</GenBtn>
       </form>
       <Panel>

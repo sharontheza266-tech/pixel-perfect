@@ -44,7 +44,6 @@ export function Navbar() {
           <Button variant="ghost" size="icon" aria-label="Toggle dark mode" onClick={() => setDark((d) => !d)}>
             {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
-          <Button variant="ghost" className="hidden md:inline-flex">Sign In</Button>
           <Button asChild className="hidden rounded-full bg-brand shadow-glow md:inline-flex"><a href="#pricing">Get Started</a></Button>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -59,7 +58,6 @@ export function Navbar() {
             ))}
           </ul>
           <div className="flex gap-2">
-            <Button variant="outline" className="flex-1">Sign In</Button>
             <Button asChild className="flex-1 bg-brand"><a href="#pricing" onClick={() => setOpen(false)}>Get Started</a></Button>
           </div>
         </div>
